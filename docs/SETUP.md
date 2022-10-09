@@ -34,8 +34,8 @@ Otherwise, skip ahead to the section "Setup on Generic System".
 1. Clone repos:
 
    ```bash
-   git clone https://github.com/Arrrlex/amptorch.git
-   git clone https://github.com/Arrrlex/bdqm-hyperparam-tuning.git
+   git clone https://github.com/ulissigroup/amptorch.git
+   git clone https://github.com/20ryanc/bdqm-hyperparam-tuning.git
    ```
 
 1. Start an interactive job:
@@ -138,8 +138,8 @@ Otherwise, skip ahead to the section "Setup on Generic System".
 1. Clone repos:
 
    ```bash
-   git clone https://github.com/Arrrlex/amptorch.git
-   git clone https://github.com/Arrrlex/bdqm-hyperparam-tuning.git
+   git clone https://github.com/ulissigroup/amptorch.git
+   git clone https://github.com/20ryanc/bdqm-hyperparam-tuning.git
    ```
 
 1. Ensure conda is installed
