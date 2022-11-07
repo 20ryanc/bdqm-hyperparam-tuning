@@ -68,69 +68,30 @@ Otherwise, skip ahead to the section "Setup on Generic System".
    pip install -e .
    ```
 
-1. **Install MySQL**:
+1. **MySQL setup for Remote Server**:
 
-   1. If you've tried to install MySQL before, delete the old attempt: `rm -rf ~/scratch/db`
-
-   1. Run:
-
+   1. ssh into remote server and foward port into local computer. In the example below port 3306 from the server is fowarded to port 5555 on the local machine. **Do Not Close**
       ```
-      $ export DB_DIR=$HOME/scratch/db
-      $ mkdir -p $DB_DIR
-
-      $ cat << EOF > ~/.my.cnf
-      [mysqld]
-      datadir=$DB_DIR
-      socket=$DB_DIR/mysqldb.sock
-      user=$USER
-      symbolic-links=0
-      skip-networking
-
-      [mysqld_safe]
-      log-error=$DB_DIR/mysqldb.log
-      pid-file=$DB_DIR/mysqldb.pid
-
-      [mysql]
-      socket=$DB_DIR/mysqldb.sock
-      EOF
+      ssh <UserName>@<HostName> -L localhost:5555:localhost:3306
+      ```
+   1. Open a seperate terminal and ssh into PACE-ICE and reverse foward the local port into pace. The example fowards port 5555 from our local machine to PACE-ICE
+      ```
+      ssh -XC -A <UserName>@pace-ice.pace.gatech.edu -R localhost:5555:localhost:5555
       ```
 
-   1. Run `mysql_install_db --datadir=$DB_DIR`
-
-   1. Run `mysqld_safe &`
-
-   1. Choose a password and make a note of it
-
-   1. Run this, **replacing 'my-secure-password' with the password you just
-      chose**:
-
-      ```
-      mysql -u root << EOF
-      UPDATE mysql.user SET Password=PASSWORD(RAND()) WHERE User='root';
-      DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');
-      DELETE FROM mysql.user WHERE User='';
-      DELETE FROM mysql.db WHERE Db='test' OR Db='test_%';
-      GRANT ALL PRIVILEGES ON *.* TO '$USER'@'%' IDENTIFIED BY 'my-secure-password' WITH GRANT OPTION;
-      FLUSH PRIVILEGES;
-      EOF
-      ```
-
-   1. Run `mysql -u $USER -p`. When prompted, enter your MySQL password.
-
-   1. At the MySQL prompt, run `CREATE DATABASE hpopt;`
-
-   1. Exit the MySQL prompt, e.g. run `exit`
-
-   1. Quit the interactive job, e.g. run `exit` again to get back to the login
-      node.
-
-1. Create a file `~/bdqm-hyperparam-tuning/.env` with the following contents:
+1. We want to create an ssh tunnel from computing nodes to login nodes. Create a file `~/bdqm-hyperparam-tuning/.env` with the following contents:
 
    ```
-   MYSQL_USERNAME=... # your gatech username
-   MYSQL_PASSWORD=... # the mysql password you set in step 8
-   HPOPT_DB=hpopt
-   MYSQL_NODE=placeholder
+   MYSQL_USERNAME=... # your sql username
+   MYSQL_PASSWORD=... # your sql password
+   HPOPT_DB=hpopt 
+   MYSQL_HOSTNAME=... # 127.0.0.1 if you are doing port fowarding or running locally
+   #Ignore rest if you are not using SSH Port Fowarding to connect to remote SSH server
+   MYSQL_PORT=... # 5555 if you followed setup for remote server
+   SSH_HOST=... # the hostname of ssh server (login-pace-ice-1)
+   SSH_USER=... # the username for ssh server (your gatech username)
+   SSH_PASS=... # password (your gatech password)
+   SSH_PORT=... # ssh port default is 22
    ```
 
 ## Setup on Generic System<a name="setup-on-generic-system"></a>
@@ -192,5 +153,5 @@ Otherwise, skip ahead to the section "Setup on Generic System".
    MYSQL_USERNAME=root
    MYSQL_PASSWORD=... # the mysql password you set in step 8
    HPOPT_DB=hpopt
-   MYSQL_NODE=localhost
+   MYSQL_HOSTNAME=localhost
    ```
