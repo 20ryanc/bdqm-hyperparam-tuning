@@ -20,7 +20,6 @@ def run_pace_tuning_job(
     params: str = "",
     epochs: int = 100,
 ):
-    ensure_mysql_running()
     params_dict = parse_params(params, prefix="param_")
 
     data = absolute(data, root="cwd")
