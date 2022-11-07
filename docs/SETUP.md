@@ -68,10 +68,16 @@ Otherwise, skip ahead to the section "Setup on Generic System".
    pip install -e .
    ```
 
-1. **Install MySQL**:
+1. **MySQL setup for Remote Server**:
 
-   1. Make sure an Port on your local computer runs mySQL such that it is possible to foward that port
-   2. Make sure to create a Schema named hpopt
+   1. ssh into remote server and foward port into local computer. In the example below port 3306 from the server is fowarded to port 5555 on the local machine. **Do Not Close**
+      ```
+      ssh <UserName>@<HostName> -L localhost:5555:localhost:3306
+      ```
+   1. Open a seperate terminal and ssh into PACE-ICE and reverse foward the local port into pace. The example fowards port 5555 from our local machine to PACE-ICE
+      ```
+      ssh -XC -A <UserName>@pace-ice.pace.gatech.edu -R localhost:5555:localhost:5555
+      ```
 
 1. Create a file `~/bdqm-hyperparam-tuning/.env` with the following contents:
 
@@ -81,7 +87,7 @@ Otherwise, skip ahead to the section "Setup on Generic System".
    HPOPT_DB=hpopt 
    MYSQL_HOSTNAME=... # 127.0.0.1 if you are doing port fowarding or running locally
    #Ignore rest if you are not using SSH Port Fowarding to connect to remote SSH server
-   MYSQL_PORT=... # 3306 is default mySQL port 
+   MYSQL_PORT=... # 5555 if you followed setup for remote server
    SSH_HOST=... # the hostname of ssh server
    SSH_USER=... # the username for ssh server
    SSH_PASS=... # password
