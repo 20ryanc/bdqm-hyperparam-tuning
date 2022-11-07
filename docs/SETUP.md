@@ -79,7 +79,7 @@ Otherwise, skip ahead to the section "Setup on Generic System".
       ssh -XC -A <UserName>@pace-ice.pace.gatech.edu -R localhost:5555:localhost:5555
       ```
 
-1. Create a file `~/bdqm-hyperparam-tuning/.env` with the following contents:
+1. We want to create an ssh tunnel from computing nodes to login nodes. Create a file `~/bdqm-hyperparam-tuning/.env` with the following contents:
 
    ```
    MYSQL_USERNAME=... # your sql username
@@ -88,9 +88,9 @@ Otherwise, skip ahead to the section "Setup on Generic System".
    MYSQL_HOSTNAME=... # 127.0.0.1 if you are doing port fowarding or running locally
    #Ignore rest if you are not using SSH Port Fowarding to connect to remote SSH server
    MYSQL_PORT=... # 5555 if you followed setup for remote server
-   SSH_HOST=... # the hostname of ssh server
-   SSH_USER=... # the username for ssh server
-   SSH_PASS=... # password
+   SSH_HOST=... # the hostname of ssh server (login-pace-ice-1)
+   SSH_USER=... # the username for ssh server (your gatech username)
+   SSH_PASS=... # password (your gatech password)
    SSH_PORT=... # ssh port default is 22
    ```
 
