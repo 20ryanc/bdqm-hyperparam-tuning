@@ -31,3 +31,4 @@ dependencies:
     - optuna==2.10.*
     - click<8.1.0
     - typer
+    - sshtunnel
