@@ -8,6 +8,7 @@ from optuna.samplers import (CmaEsSampler, GridSampler, RandomSampler,
                              TPESampler)
 
 from ampopt.utils import ampopt_path
+from sshtunnel import SSHTunnelForwarder
 
 
 @lru_cache
@@ -16,9 +17,28 @@ def connection_string() -> str:
     config = dotenv_values(ampopt_path / ".env")
     username = config["MYSQL_USERNAME"]
     password = config["MYSQL_PASSWORD"]
-    node = config["MYSQL_NODE"]
+    sql_hostname = config["MYSQL_HOSTNAME"]
     db = config["HPOPT_DB"]
-    return f"mysql+pymysql://{username}:{password}@{node}/{db}"
+    tunnel = None
+    ret = ''
+    if "SSH_HOST" in config:
+        sql_port = config["MYSQL_PORT"]
+        ssh_host = config["SSH_HOST"]
+        ssh_user = config["SSH_USER"]
+        ssh_pass = config["SSH_PASS"]
+        ssh_port = config["SSH_PORT"]
+        
+        tunnel = SSHTunnelForwarder(
+                (ssh_host, int(ssh_port)),
+                ssh_username=ssh_user,
+                ssh_password=ssh_pass,
+                remote_bind_address=(sql_hostname, int(sql_port)))
+        tunnel.start()
+        port = str(tunnel.local_bind_port)
+        
+        return f"mysql+pymysql://{username}:{password}@{sql_hostname}:{port}/{db}"
+
+    return f"mysql+pymysql://{username}:{password}@{sql_hostname}/{db}"
 
 
 def delete_study(study_name: str):

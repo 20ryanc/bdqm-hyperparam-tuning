@@ -215,16 +215,6 @@ def view_studies():
 
 
 @app.command()
-def ensure_mysql_running():
-    """
-    If MySQL job is not running, start it.
-    """
-    from ampopt import ensure_mysql_running
-
-    ensure_mysql_running()
-
-
-@app.command()
 def view_jobs(name: str = None):
     """
     View list of all running jobs for the current user.

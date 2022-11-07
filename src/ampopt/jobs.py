@@ -168,11 +168,3 @@ def update_dotenv_file(node):
             if not line.startswith("MYSQL_NODE"):
                 f.write(line)
         f.write(f"MYSQL_NODE={node}")
-
-
-def ensure_mysql_running():
-    """
-    Run MySQL (or check it's running) and make sure .env is up-to-date.
-    """
-    job = get_or_start("mysql")
-    update_dotenv_file(job.node)
