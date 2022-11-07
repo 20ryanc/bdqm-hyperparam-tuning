@@ -70,67 +70,22 @@ Otherwise, skip ahead to the section "Setup on Generic System".
 
 1. **Install MySQL**:
 
-   1. If you've tried to install MySQL before, delete the old attempt: `rm -rf ~/scratch/db`
-
-   1. Run:
-
-      ```
-      $ export DB_DIR=$HOME/scratch/db
-      $ mkdir -p $DB_DIR
-
-      $ cat << EOF > ~/.my.cnf
-      [mysqld]
-      datadir=$DB_DIR
-      socket=$DB_DIR/mysqldb.sock
-      user=$USER
-      symbolic-links=0
-      skip-networking
-
-      [mysqld_safe]
-      log-error=$DB_DIR/mysqldb.log
-      pid-file=$DB_DIR/mysqldb.pid
-
-      [mysql]
-      socket=$DB_DIR/mysqldb.sock
-      EOF
-      ```
-
-   1. Run `mysql_install_db --datadir=$DB_DIR`
-
-   1. Run `mysqld_safe &`
-
-   1. Choose a password and make a note of it
-
-   1. Run this, **replacing 'my-secure-password' with the password you just
-      chose**:
-
-      ```
-      mysql -u root << EOF
-      UPDATE mysql.user SET Password=PASSWORD(RAND()) WHERE User='root';
-      DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');
-      DELETE FROM mysql.user WHERE User='';
-      DELETE FROM mysql.db WHERE Db='test' OR Db='test_%';
-      GRANT ALL PRIVILEGES ON *.* TO '$USER'@'%' IDENTIFIED BY 'my-secure-password' WITH GRANT OPTION;
-      FLUSH PRIVILEGES;
-      EOF
-      ```
-
-   1. Run `mysql -u $USER -p`. When prompted, enter your MySQL password.
-
-   1. At the MySQL prompt, run `CREATE DATABASE hpopt;`
-
-   1. Exit the MySQL prompt, e.g. run `exit`
-
-   1. Quit the interactive job, e.g. run `exit` again to get back to the login
-      node.
+   1. Make sure an Port on your local computer runs mySQL such that it is possible to foward that port
+   2. Make sure to create a Schema named hpopt
 
 1. Create a file `~/bdqm-hyperparam-tuning/.env` with the following contents:
 
    ```
-   MYSQL_USERNAME=... # your gatech username
-   MYSQL_PASSWORD=... # the mysql password you set in step 8
-   HPOPT_DB=hpopt
-   MYSQL_NODE=placeholder
+   MYSQL_USERNAME=... # your sql username
+   MYSQL_PASSWORD=... # your sql password
+   HPOPT_DB=hpopt 
+   MYSQL_HOSTNAME=... # 127.0.0.1 if you are doing port fowarding or running locally
+   #Ignore rest if you are not using SSH Port Fowarding to connect to remote SSH server
+   MYSQL_PORT=... # 3306 is default mySQL port 
+   SSH_HOST=... # the hostname of ssh server
+   SSH_USER=... # the username for ssh server
+   SSH_PASS=... # password
+   SSH_PORT=... # ssh port default is 22
    ```
 
 ## Setup on Generic System<a name="setup-on-generic-system"></a>
@@ -192,5 +147,5 @@ Otherwise, skip ahead to the section "Setup on Generic System".
    MYSQL_USERNAME=root
    MYSQL_PASSWORD=... # the mysql password you set in step 8
    HPOPT_DB=hpopt
-   MYSQL_NODE=localhost
+   MYSQL_HOSTNAME=localhost
    ```
