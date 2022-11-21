@@ -78,6 +78,13 @@ Otherwise, skip ahead to the section "Setup on Generic System".
       ```
       ssh -XC -A <UserName>@pace-ice.pace.gatech.edu -R localhost:5555:localhost:5555
       ```
+1. **MySQL setup for Local Server**:
+
+   1. Make sure you have mySQL server running on your local computer that is currently on port 3306. Ignore ssh thuenl setup in the .env file in the next step.
+   1. Open a seperate terminal and ssh into PACE-ICE and reverse foward the local port into pace. The example fowards port 5555 from our local machine to PACE-ICE
+      ```
+      ssh -XC -A <UserName>@pace-ice.pace.gatech.edu -R localhost:5555:localhost:3306
+      ```
 
 1. We want to create an ssh tunnel from computing nodes to login nodes. Create a file `~/bdqm-hyperparam-tuning/.env` with the following contents:
 
