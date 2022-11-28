@@ -68,6 +68,8 @@ Otherwise, skip ahead to the section "Setup on Generic System".
    pip install -e .
    ```
 
+1. Make sure MySQL server has a database named "hpopt" 
+
 1. **MySQL setup for Remote Server**:
 
    1. ssh into remote server and foward port into local computer. In the example below port 3306 from the server is fowarded to port 5555 on the local machine. **Do Not Close**
